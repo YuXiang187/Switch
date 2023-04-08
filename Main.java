@@ -15,6 +15,7 @@ public class Main implements NativeKeyListener {
     TrayIcon trayIcon;
     Robot robot;
     Timer timer;
+    boolean isRun = false;
     int x = 100;
     int y = 100;
 
@@ -75,29 +76,33 @@ public class Main implements NativeKeyListener {
     }
 
     private void run() {
-        Point nowPoint = MouseInfo.getPointerInfo().getLocation();
-        robot.keyPress(KeyEvent.VK_ALT);
-        robot.keyPress(KeyEvent.VK_TAB);
-        robot.keyRelease(KeyEvent.VK_TAB);
-        robot.keyRelease(KeyEvent.VK_ALT);
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        if (!isRun) {
+            isRun = true;
+            Point nowPoint = MouseInfo.getPointerInfo().getLocation();
+            robot.keyPress(KeyEvent.VK_ALT);
+            robot.keyPress(KeyEvent.VK_TAB);
+            robot.keyRelease(KeyEvent.VK_TAB);
+            robot.keyRelease(KeyEvent.VK_ALT);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            robot.mouseMove(x, y);
+            robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+            robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+            robot.mouseMove((int) nowPoint.getX(), (int) nowPoint.getY());
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            robot.keyPress(KeyEvent.VK_ALT);
+            robot.keyPress(KeyEvent.VK_TAB);
+            robot.keyRelease(KeyEvent.VK_TAB);
+            robot.keyRelease(KeyEvent.VK_ALT);
+            isRun = false;
         }
-        robot.mouseMove(x, y);
-        robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-        robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-        robot.mouseMove((int) nowPoint.getX(), (int) nowPoint.getY());
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        robot.keyPress(KeyEvent.VK_ALT);
-        robot.keyPress(KeyEvent.VK_TAB);
-        robot.keyRelease(KeyEvent.VK_TAB);
-        robot.keyRelease(KeyEvent.VK_ALT);
     }
 
     public static void main(String[] args) {
